@@ -18,6 +18,8 @@ const userSchema = new Schema(
       type: String,
       required: [true, "Name is required."],
     },
+    sprints: [{ type: Schema.Types.ObjectId, ref: 'Sprint' }]
+
   },
   {
     // this second object adds extra properties: `createdAt` and `updatedAt`
