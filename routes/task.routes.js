@@ -15,7 +15,7 @@ router.post("/tasks", async (req, res, next) => {
     sprint: sprintId,
   });
 
-  Sprint.findByIdAndUpdate(sprintId, { $push: { tasks: newTask._id } })
+  Sprint.findByIdAndUpdate(sprintId, { $push: { tasks: newTask._id } }, {new: true})
     .then((foundSprint) => {
       return foundSprint.save();
     })
