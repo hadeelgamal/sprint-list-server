@@ -15,7 +15,11 @@ router.post("/tasks", async (req, res, next) => {
     sprint: sprintId,
   });
 
-  Sprint.findByIdAndUpdate(sprintId, { $push: { tasks: newTask._id } }, {new: true})
+  Sprint.findByIdAndUpdate(
+    sprintId,
+    { $push: { tasks: newTask._id } },
+    { new: true }
+  )
     .then((foundSprint) => {
       return foundSprint.save();
     })
@@ -23,6 +27,18 @@ router.post("/tasks", async (req, res, next) => {
       res.json(newTask);
     })
     .catch((err) => res.json(err));
+});
+
+// PUT /api/tasks  -  update tasks
+router.put("/tasks/:taskId", (req, res) => {
+  const { taskId } = req.params;
+  const { checked } = req.body;
+
+  if (!mongoose.Types.ObjectId.isValid(taskId)) {
+    res.status(400).json({ message: "Specified id is not valid" });
+    return;
+  }
+  Task.findByIdAndUpdate(taskId, { checked });
 });
 
 // DELETE - /api/tasks/:taskId  - Delete specified task
@@ -35,10 +51,15 @@ router.delete("/tasks/:sprintId/:taskId", async (req, res) => {
   }
 
   const deletedTask = await Task.findByIdAndDelete(taskId);
-  Sprint.findByIdAndUpdate(sprintId, { $pull: {tasks: deletedTask._id } } , {new: true})
-  .then(updatedSprint => {
-    updatedSprint.save()
-    res.json(updatedSprint.tasks)})
+  Sprint.findByIdAndUpdate(
+    sprintId,
+    { $pull: { tasks: deletedTask._id } },
+    { new: true }
+  )
+    .then((updatedSprint) => {
+      updatedSprint.save();
+      res.json(updatedSprint.tasks);
+    })
     .catch((err) => console.log(err));
 });
 
