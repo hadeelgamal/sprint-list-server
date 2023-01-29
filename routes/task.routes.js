@@ -35,7 +35,7 @@ router.delete("/tasks/:sprintId/:taskId", async (req, res) => {
   }
 
   const deletedTask = await Task.findByIdAndDelete(taskId);
-  Sprint.findByIdAndUpdate(sprintId, { $pull: {tasks: deletedTask._id } })
+  Sprint.findByIdAndUpdate(sprintId, { $pull: {tasks: deletedTask._id } } , {new: true})
   .then(updatedSprint => {
     updatedSprint.save()
     res.json(updatedSprint.tasks)})
