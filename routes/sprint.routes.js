@@ -48,7 +48,7 @@ router.put("/sprints/:sprintId", (req, res)=>{
         return;
       }
 
-    Project.findByIdAndUpdate(sprintId, {title, dueDate, currentStatus}, {new: true})
+    Sprint.findByIdAndUpdate(sprintId, {title, dueDate, currentStatus}, {new: true})
             .then(updatedSprint => res.json(updatedSprint))
             .catch(err => console.log(err))
 
