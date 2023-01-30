@@ -30,7 +30,7 @@ router.post("/tasks", async (req, res, next) => {
 });
 
 // PUT /api/tasks  -  update tasks
-router.put("/tasks/:taskId", (req, res) => {
+router.put("/tasks/:taskId", async (req, res) => {
   const { taskId } = req.params;
   const { checked } = req.body;
 
@@ -38,7 +38,13 @@ router.put("/tasks/:taskId", (req, res) => {
     res.status(400).json({ message: "Specified id is not valid" });
     return;
   }
-  Task.findByIdAndUpdate(taskId, { checked });
+  await Task.findByIdAndUpdate(taskId, { checked }, {new: true})
+   .then(( foundTask) => {
+    console.log("found task from server:", foundTask)
+    res.json(foundTask);
+   
+
+  })
 });
 
 // DELETE - /api/tasks/:taskId  - Delete specified task
