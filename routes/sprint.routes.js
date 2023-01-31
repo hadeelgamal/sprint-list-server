@@ -2,9 +2,10 @@ const router = require("express").Router();
 const mongoose = require('mongoose');
 
 const Sprint = require("../models/Sprint.model")
+const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 
 //  POST /api/sprints  -  Creates a new sprint
-router.post('/sprints', (req, res, next) => {
+router.post('/sprints',  isAuthenticated, (req, res, next) => {
     const { title, dueDate, currentStatus } = req.body;
    
     Sprint.create({ title, dueDate, currentStatus, tasks: [] })
@@ -13,7 +14,7 @@ router.post('/sprints', (req, res, next) => {
   });
 
   // GET /api/sprints - Returns all the sprints
-router.get('/sprints', (req, res) => {
+router.get('/sprints',  isAuthenticated, (req, res) => {
     Sprint.find()
             .populate('tasks')
             .then(allsprints => res.json(allsprints))
@@ -24,7 +25,7 @@ router.get('/sprints', (req, res) => {
 })
 
 // GET /api/sprints/:sprintId - Return the specified sprint using the id
-router.get("/sprints/:sprintId", (req, res) => {
+router.get("/sprints/:sprintId", isAuthenticated, (req, res) => {
     const { sprintId } = req.params;
 
     if (!mongoose.Types.ObjectId.isValid(sprintId)) {
@@ -39,7 +40,7 @@ router.get("/sprints/:sprintId", (req, res) => {
 })
 
 // PUT  /api/sprints/:sprintId - Edit specified sprint
-router.put("/sprints/:sprintId", (req, res)=>{
+router.put("/sprints/:sprintId", isAuthenticated, (req, res)=>{
     const { sprintId } = req.params;
     const { title, dueDate, currentStatus } = req.body;
 
@@ -56,7 +57,7 @@ router.put("/sprints/:sprintId", (req, res)=>{
 
 // DELETE - /api/sprints/:sprintId  - Delete specified project
 
-router.delete("/sprints/:sprintId", (req, res)=>{
+router.delete("/sprints/:sprintId", isAuthenticated, (req, res)=>{
     const { sprintId } = req.params;
     
     if (!mongoose.Types.ObjectId.isValid(sprintId)) {
