@@ -4,8 +4,10 @@ const { findById } = require("../models/Sprint.model");
 const Sprint = require("../models/Sprint.model");
 const Task = require("../models/Task.model");
 
+const { isAuthenticated } = require("../middleware/jwt.middleware.js");
+
 //  POST /api/tasks  -  Creates a new task
-router.post("/tasks", async (req, res, next) => {
+router.post("/tasks", isAuthenticated, async (req, res, next) => {
   const { description, dueDate, checked, sprintId } = req.body;
 
   const newTask = await Task.create({
@@ -30,7 +32,7 @@ router.post("/tasks", async (req, res, next) => {
 });
 
 // PUT /api/tasks  -  update tasks
-router.put("/tasks/:taskId", async (req, res) => {
+router.put("/tasks/:taskId",isAuthenticated, async (req, res) => {
   const { taskId } = req.params;
   const { checked } = req.body;
 
@@ -49,7 +51,7 @@ router.put("/tasks/:taskId", async (req, res) => {
 
 // DELETE - /api/tasks/:taskId  - Delete specified task
 
-router.delete("/tasks/:sprintId/:taskId", async (req, res) => {
+router.delete("/tasks/:sprintId/:taskId", isAuthenticated, async (req, res) => {
   const { taskId, sprintId } = req.params;
   if (!mongoose.Types.ObjectId.isValid(taskId)) {
     res.status(400).json({ message: "Specified id is not valid" });
