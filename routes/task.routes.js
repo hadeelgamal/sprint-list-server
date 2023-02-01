@@ -19,7 +19,8 @@ router.post("/tasks", isAuthenticated, async (req, res, next) => {
 
   Sprint.findByIdAndUpdate(
     sprintId,
-    { $push: { tasks: newTask._id } },
+
+    {$push: { tasks: { $each: newTask._id, $position: 0 } }},
     { new: true }
   )
     .then((foundSprint) => {
