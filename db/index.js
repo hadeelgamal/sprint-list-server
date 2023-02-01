@@ -9,7 +9,7 @@ const MONGO_URI =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/sprint-list-server";
 
 mongoose
-  .connect(MONGO_URI)
+  .connect("mongodb+srv://hadeelg:bY1l1msVb9JFY2gG@clusterironhackproject.364xx9c.mongodb.net/sprint-list-Ironhack")
   .then((x) => {
     const dbName = x.connections[0].name;
     console.log(`Connected to Mongo! Database name: "${dbName}"`);
