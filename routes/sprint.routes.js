@@ -8,7 +8,7 @@ const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 router.post('/sprints',  isAuthenticated, (req, res, next) => {
     const { title, dueDate, currentStatus } = req.body;
    console.log("req.body: ", req.body)
-    Sprint.create({ title, dueDate, currentStatus, tasks: [] })
+    Sprint.create({ title, dueDate, currentStatus, tasks: [], owner: req.payload._id })
       .then(response => {
         console.log("response: ", response)
         res.json(response)})
