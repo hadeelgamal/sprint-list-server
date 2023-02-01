@@ -22,7 +22,7 @@ router.get('/sprints',  isAuthenticated, (req, res) => {
   console.log(userId)
 
     Sprint.find({owner: userId})
-            .sort({ createdAt: 'asc'})
+            .sort({ createdAt: 'desc'})
             .populate('tasks')
             .then(allsprints => {
               console.log("all sprints: ", allsprints)
