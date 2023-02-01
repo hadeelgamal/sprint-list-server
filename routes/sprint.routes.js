@@ -20,9 +20,9 @@ router.post('/sprints',  isAuthenticated, (req, res, next) => {
 router.get('/sprints',  isAuthenticated, (req, res) => {
   const userId = req.payload._id;
   console.log(userId)
-  // User.find
-  // .populate ('sprints')
+
     Sprint.find({owner: userId})
+            .sort({ createdAt: 'asc'})
             .populate('tasks')
             .then(allsprints => {
               console.log("all sprints: ", allsprints)
