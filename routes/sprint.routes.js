@@ -7,10 +7,9 @@ const { isAuthenticated } = require("../middleware/jwt.middleware.js");
 //  POST /api/sprints  -  Creates a new sprint
 router.post('/sprints',  isAuthenticated, (req, res, next) => {
     const { title, dueDate, currentStatus } = req.body;
-   console.log("req.body: ", req.body)
     Sprint.create({ title, dueDate, currentStatus, tasks: [], owner: req.payload._id })
       .then(response => {
-        console.log("response: ", response)
+       
         res.json(response)})
 
       .catch(err => res.json(err));
@@ -19,13 +18,11 @@ router.post('/sprints',  isAuthenticated, (req, res, next) => {
   // GET /api/sprints - Returns all the sprints
 router.get('/sprints',  isAuthenticated, (req, res) => {
   const userId = req.payload._id;
-  console.log(userId)
 
     Sprint.find({owner: userId})
             .sort({ createdAt: 'desc'})
             .populate('tasks')
             .then(allsprints => {
-              console.log("all sprints: ", allsprints)
               res.json(allsprints)})
             .catch(err => {
               console.log(err)
